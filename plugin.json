@@ -1,0 +1,228 @@
+{
+    "$schema": "https://raw.githubusercontent.com/k8sdockside/k8sdockside/main/docs/plugin.schema.json",
+    "id": "trivy",
+    "name": "Trivy",
+    "version": "1.0.0",
+    "minAppVersion": "0.1.12",
+    "tagline": "vulnerabilities, misconfigurations, exposed secrets and compliance, from trivy-operator",
+    "icon": "shield",
+    "logo": "logo.png",
+    "category": "security",
+    "docs": "https://aquasecurity.github.io/trivy-operator/latest/",
+    "author": "K8s Dockside",
+    "authorUrl": "https://github.com/k8sdockside",
+    "links": [
+        { "label": "trivy-operator documentation", "url": "https://aquasecurity.github.io/trivy-operator/latest/" },
+        { "label": "Report CRDs", "url": "https://aquasecurity.github.io/trivy-operator/latest/docs/crds/" },
+        { "label": "Trivy", "url": "https://trivy.dev" },
+        { "label": "GitHub", "url": "https://github.com/aquasecurity/trivy-operator" },
+        { "label": "Plugin source", "url": "https://github.com/k8sdockside/trivy" }
+    ],
+    "description": "trivy-operator scans the cluster continuously and writes what it finds as reports: the vulnerabilities in every container image, the misconfigurations of every workload, role and node, secrets left inside images, and how the cluster measures up against compliance benchmarks such as the CIS Kubernetes Benchmark and the NSA hardening guide.\n\nThe Overview turns those reports into one picture: a security score, the vulnerabilities by severity, how many of them have a fix, a heatmap of the namespaces, the most vulnerable images, the CVEs that hit the most workloads, the checks that fail most often, exposed secrets and each compliance report's pass rate. Vulnerabilities, Misconfigurations, Exposed secrets and Compliance are the working pages: search, filter by severity and namespace, group by CVE, image or workload, and open any row for the details, the fix and the workloads it affects.\n\nDeployments, StatefulSets, DaemonSets, CronJobs, Jobs, ReplicaSets and Pods get a Trivy panel in their detail view with their own findings. Rescanning deletes a report so trivy-operator writes it again; it is shown to you before it is done.",
+
+    "requires": [
+        { "kind": "crd:vulnerabilityreports.aquasecurity.github.io", "label": "Vulnerability reports" },
+        { "kind": "crd:configauditreports.aquasecurity.github.io", "label": "Config audit reports", "optional": true },
+        { "kind": "crd:exposedsecretreports.aquasecurity.github.io", "label": "Exposed secret reports", "optional": true },
+        { "kind": "crd:rbacassessmentreports.aquasecurity.github.io", "label": "RBAC assessment reports", "optional": true },
+        { "kind": "crd:infraassessmentreports.aquasecurity.github.io", "label": "Infra assessment reports", "optional": true },
+        { "kind": "crd:clustercompliancereports.aquasecurity.github.io", "label": "Compliance reports", "optional": true },
+        { "kind": "crd:clustervulnerabilityreports.aquasecurity.github.io", "label": "Cluster vulnerability reports", "optional": true },
+        { "kind": "crd:clusterconfigauditreports.aquasecurity.github.io", "label": "Cluster config audit reports", "optional": true },
+        { "kind": "crd:clusterrbacassessmentreports.aquasecurity.github.io", "label": "Cluster RBAC assessment reports", "optional": true },
+        { "kind": "crd:clusterinfraassessmentreports.aquasecurity.github.io", "label": "Cluster infra assessment reports", "optional": true },
+        { "kind": "crd:sbomreports.aquasecurity.github.io", "label": "SBOM reports", "optional": true },
+        { "kind": "crd:clustersbomreports.aquasecurity.github.io", "label": "Cluster SBOM reports", "optional": true }
+    ],
+
+    "overview": { "entry": "overview.html" },
+
+    "views": [
+        {
+            "id": "vulnerabilities",
+            "label": "Vulnerabilities",
+            "icon": "alert",
+            "type": "custom",
+            "entry": "vulnerabilities.html",
+            "focus": { "kind": "crd:vulnerabilityreports.aquasecurity.github.io", "hash": "group=workload&report={namespace}/{name}" }
+        },
+        {
+            "id": "misconfigurations",
+            "label": "Misconfigurations",
+            "icon": "policy",
+            "type": "custom",
+            "entry": "misconfigurations.html",
+            "focus": { "kind": "crd:configauditreports.aquasecurity.github.io", "hash": "group=resource&report={namespace}/{name}" }
+        },
+        { "id": "secrets", "label": "Exposed secrets", "icon": "lock", "type": "custom", "entry": "secrets.html" },
+        {
+            "id": "compliance",
+            "label": "Compliance",
+            "icon": "certificate",
+            "type": "custom",
+            "entry": "compliance.html",
+            "focus": { "kind": "crd:clustercompliancereports.aquasecurity.github.io", "hash": "report={name}" }
+        },
+
+        { "id": "vulnerability-reports", "label": "Vulnerability reports", "icon": "file", "kind": "crd:vulnerabilityreports.aquasecurity.github.io" },
+        { "id": "config-audit-reports", "label": "Config audit reports", "icon": "file", "kind": "crd:configauditreports.aquasecurity.github.io" },
+        { "id": "exposed-secret-reports", "label": "Exposed secret reports", "icon": "file", "kind": "crd:exposedsecretreports.aquasecurity.github.io" },
+        { "id": "rbac-assessment-reports", "label": "RBAC assessment reports", "icon": "grant", "kind": "crd:rbacassessmentreports.aquasecurity.github.io" },
+        { "id": "infra-assessment-reports", "label": "Infra assessment reports", "icon": "server", "kind": "crd:infraassessmentreports.aquasecurity.github.io" },
+        { "id": "compliance-reports", "label": "Compliance reports", "icon": "certificate", "kind": "crd:clustercompliancereports.aquasecurity.github.io" },
+        { "id": "sbom-reports", "label": "SBOM reports", "icon": "layers", "kind": "crd:sbomreports.aquasecurity.github.io" },
+        { "id": "cluster-vulnerability-reports", "label": "Cluster vulnerability reports", "icon": "file", "kind": "crd:clustervulnerabilityreports.aquasecurity.github.io" },
+        { "id": "cluster-config-audit-reports", "label": "Cluster config audit reports", "icon": "file", "kind": "crd:clusterconfigauditreports.aquasecurity.github.io" },
+        { "id": "cluster-rbac-assessment-reports", "label": "Cluster RBAC assessment reports", "icon": "grant", "kind": "crd:clusterrbacassessmentreports.aquasecurity.github.io" },
+        { "id": "cluster-infra-assessment-reports", "label": "Cluster infra assessment reports", "icon": "server", "kind": "crd:clusterinfraassessmentreports.aquasecurity.github.io" },
+        { "id": "cluster-sbom-reports", "label": "Cluster SBOM reports", "icon": "layers", "kind": "crd:clustersbomreports.aquasecurity.github.io" },
+
+        { "id": "operator", "label": "Operator", "icon": "rocket", "kind": "pods", "selector": "app.kubernetes.io/name=trivy-operator" },
+        { "id": "scan-jobs", "label": "Scan jobs", "icon": "play", "kind": "jobs", "selector": "app.kubernetes.io/managed-by=trivy-operator" }
+    ],
+
+    "cards": [
+        { "label": "Vulnerability reports", "kind": "crd:vulnerabilityreports.aquasecurity.github.io" },
+        { "label": "Config audit reports", "kind": "crd:configauditreports.aquasecurity.github.io" },
+        { "label": "Exposed secret reports", "kind": "crd:exposedsecretreports.aquasecurity.github.io" },
+        { "label": "RBAC assessment reports", "kind": "crd:rbacassessmentreports.aquasecurity.github.io" },
+        { "label": "Compliance reports", "kind": "crd:clustercompliancereports.aquasecurity.github.io" },
+        {
+            "label": "Operator pods",
+            "kind": "pods",
+            "groupBy": "status.phase",
+            "tones": { "Running": "ok", "Succeeded": "info", "Pending": "warn", "Failed": "error", "Unknown": "warn" }
+        }
+    ],
+
+    "charts": [
+        {
+            "id": "vulnerabilities",
+            "label": "Vulnerabilities",
+            "attach": "overview",
+            "unit": "count",
+            "legend": "severity",
+            "description": "Vulnerabilities in the images the cluster runs, by severity, from trivy-operator's own metrics (trivy_image_vulnerabilities). Needs the operator's metrics endpoint scraped, which its Helm chart's ServiceMonitor does.",
+            "query": "sum by (severity) (trivy_image_vulnerabilities)"
+        },
+        {
+            "id": "misconfigurations",
+            "label": "Misconfigurations",
+            "attach": "overview",
+            "unit": "count",
+            "legend": "severity",
+            "description": "Failed configuration checks on workloads and other resources, by severity (trivy_resource_configaudits).",
+            "query": "sum by (severity) (trivy_resource_configaudits)"
+        },
+        {
+            "id": "exposed-secrets",
+            "label": "Exposed secrets",
+            "attach": "overview",
+            "unit": "count",
+            "legend": "severity",
+            "description": "Secrets found inside container images, by severity (trivy_image_exposedsecrets).",
+            "query": "sum by (severity) (trivy_image_exposedsecrets)"
+        },
+        {
+            "id": "rbac",
+            "label": "RBAC findings",
+            "attach": "overview",
+            "unit": "count",
+            "legend": "severity",
+            "description": "Failed checks on Roles and ClusterRoles, by severity (trivy_role_rbacassessments).",
+            "query": "sum by (severity) (trivy_role_rbacassessments)"
+        },
+        {
+            "id": "deployment-vulnerabilities",
+            "label": "Vulnerabilities",
+            "attach": "deployments",
+            "unit": "count",
+            "legend": "severity",
+            "description": "Vulnerabilities in this Deployment's images, by severity (trivy_image_vulnerabilities). trivy-operator reports a Deployment through its ReplicaSets.",
+            "query": "sum by (severity) (trivy_image_vulnerabilities{namespace=\"$namespace\", resource_kind=\"ReplicaSet\", resource_name=~\"$name-[a-z0-9]+\"})"
+        },
+        {
+            "id": "statefulset-vulnerabilities",
+            "label": "Vulnerabilities",
+            "attach": "statefulsets",
+            "unit": "count",
+            "legend": "severity",
+            "description": "Vulnerabilities in this StatefulSet's images, by severity (trivy_image_vulnerabilities).",
+            "query": "sum by (severity) (trivy_image_vulnerabilities{namespace=\"$namespace\", resource_kind=\"StatefulSet\", resource_name=\"$name\"})"
+        },
+        {
+            "id": "daemonset-vulnerabilities",
+            "label": "Vulnerabilities",
+            "attach": "daemonsets",
+            "unit": "count",
+            "legend": "severity",
+            "description": "Vulnerabilities in this DaemonSet's images, by severity (trivy_image_vulnerabilities).",
+            "query": "sum by (severity) (trivy_image_vulnerabilities{namespace=\"$namespace\", resource_kind=\"DaemonSet\", resource_name=\"$name\"})"
+        }
+    ],
+
+    "sections": [
+        { "id": "deployment-security", "label": "Trivy", "kind": "deployments", "entry": "workload.html", "height": 260 },
+        { "id": "statefulset-security", "label": "Trivy", "kind": "statefulsets", "entry": "workload.html", "height": 260 },
+        { "id": "daemonset-security", "label": "Trivy", "kind": "daemonsets", "entry": "workload.html", "height": 260 },
+        { "id": "replicaset-security", "label": "Trivy", "kind": "replicasets", "entry": "workload.html", "height": 260 },
+        { "id": "cronjob-security", "label": "Trivy", "kind": "cronjobs", "entry": "workload.html", "height": 260 },
+        { "id": "job-security", "label": "Trivy", "kind": "jobs", "entry": "workload.html", "height": 260 },
+        { "id": "pod-security", "label": "Trivy", "kind": "pods", "entry": "workload.html", "height": 260 }
+    ],
+
+    "actions": [
+        {
+            "id": "rescan-vulnerabilities",
+            "label": "Rescan",
+            "icon": "repeat",
+            "kind": "crd:vulnerabilityreports.aquasecurity.github.io",
+            "confirm": "Rescan by deleting the vulnerability report {name}? trivy-operator notices the report is gone and runs a new scan job for the workload's image, which writes a fresh report in a minute or two.",
+            "done": "{name} deleted; trivy-operator will scan again",
+            "request": { "type": "delete" }
+        },
+        {
+            "id": "rescan-config",
+            "label": "Rescan",
+            "icon": "repeat",
+            "kind": "crd:configauditreports.aquasecurity.github.io",
+            "confirm": "Audit again by deleting the config audit report {name}? trivy-operator writes a new one for the resource.",
+            "done": "{name} deleted; trivy-operator will audit it again",
+            "request": { "type": "delete" }
+        },
+        {
+            "id": "rescan-secrets",
+            "label": "Rescan",
+            "icon": "repeat",
+            "kind": "crd:exposedsecretreports.aquasecurity.github.io",
+            "confirm": "Rescan by deleting the exposed secret report {name}? trivy-operator runs a new scan job for the workload's image.",
+            "done": "{name} deleted; trivy-operator will scan again",
+            "request": { "type": "delete" }
+        }
+    ],
+
+    "ui": {
+        "kinds": [
+            "pods",
+            "replicasets",
+            "deployments",
+            "statefulsets",
+            "daemonsets",
+            "jobs",
+            "cronjobs",
+            "replicationcontrollers",
+            "nodes",
+            "services",
+            "configmaps",
+            "ingresses",
+            "networkpolicies",
+            "resourcequotas",
+            "limitranges",
+            "serviceaccounts",
+            "roles",
+            "rolebindings",
+            "clusterroles",
+            "clusterrolebindings"
+        ]
+    }
+}

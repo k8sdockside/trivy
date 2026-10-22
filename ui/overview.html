@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Trivy</title>
+        <link rel="stylesheet" href="trivy.css" />
+        <!-- The bridge to the app. Served by K8s Dockside itself, always at this path. -->
+        <script src="/plugin-ui/_sdk/k8sdockside.js"></script>
+    </head>
+    <body class="page page-overview">
+        <div id="nav"></div>
+        <p id="error" class="banner error" role="alert" hidden></p>
+        <main id="main"></main>
+        <!-- The plugin's Prometheus charts, when the cluster has a Prometheus. -->
+        <section id="history" class="history" hidden></section>
+        <div id="foot"></div>
+        <!-- A classic script, not type="module": a sandboxed frame has an
+             opaque origin, so a module would be a cross-origin load.
+             Built from src/pages/overview.ts. -->
+        <script src="overview.js"></script>
+    </body>
+</html>

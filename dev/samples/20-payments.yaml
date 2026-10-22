@@ -1,0 +1,32 @@
+# Configured badly on purpose: privileged, writable root file system, no limits.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: payments
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: api }
+  template:
+    metadata:
+      labels: { app: api }
+    spec:
+      containers:
+        - name: api
+          image: python:3.8.0-slim
+          command: ["python", "-m", "http.server", "8080"]
+          securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
+---
+# A Role that can read every Secret in the namespace: an RBAC assessment finding.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: secrets-reader
+  namespace: payments
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch"]

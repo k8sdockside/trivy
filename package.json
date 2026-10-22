@@ -1,0 +1,31 @@
+{
+    "name": "k8sdockside-trivy-plugin",
+    "version": "1.0.0",
+    "private": true,
+    "description": "The Trivy plugin for K8s Dockside: vulnerabilities, misconfigurations, exposed secrets and compliance, from the reports trivy-operator writes.",
+    "license": "Apache-2.0",
+    "author": "K8s Dockside",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/k8sdockside/trivy"
+    },
+    "type": "module",
+    "engines": {
+        "node": ">=20"
+    },
+    "scripts": {
+        "build": "k8sdockside-plugin build",
+        "watch": "k8sdockside-plugin watch",
+        "preview": "node scripts/preview.mjs",
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run",
+        "check": "npm run typecheck && npm run test && k8sdockside-plugin check"
+    },
+    "devDependencies": {
+        "@k8sdockside/plugin-sdk": "^1.0.0",
+        "esbuild": "0.28.2",
+        "happy-dom": "^21.0.3",
+        "typescript": "^7.0.2",
+        "vitest": "^5.0.5"
+    }
+}
