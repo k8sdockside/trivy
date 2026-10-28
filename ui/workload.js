@@ -960,8 +960,8 @@
     root.appendChild(containers);
     const checks = p.resources.flatMap((r) => r.findings).sort((a, b) => rank(a.severity) - rank(b.severity));
     if (checks.length) {
+      const sec = sdk.ui.section({ id: "checks", title: "Failed configuration checks", count: checks.length, what: "the failed checks", parent: root });
       const box = el("div", "panel-checks");
-      box.appendChild(el("div", "mini-title", `Failed configuration checks (${checks.length})`));
       for (const c of checks.slice(0, 6)) {
         const row = el("div", "panel-check");
         add(row, sevChip(c.severity), el("span", "mono small", c.checkID), el("span", "", c.title));
@@ -969,17 +969,17 @@
         box.appendChild(row);
       }
       if (checks.length > 6) box.appendChild(el("p", "faint small", `and ${plural(checks.length - 6, "more")}`));
-      root.appendChild(box);
+      sec.body.appendChild(box);
     }
     if (p.secrets.length) {
+      const sec = sdk.ui.section({ id: "secrets", title: "Exposed secrets", count: p.secrets.length, what: "the exposed secrets", parent: root });
       const box = el("div", "panel-checks alarm");
-      box.appendChild(el("div", "mini-title", `Exposed secrets (${p.secrets.length})`));
       for (const s of p.secrets.slice(0, 4)) {
         const row = el("div", "panel-check");
         add(row, sevChip(s.severity), el("span", "", s.title), el("span", "mono small faint", s.target));
         box.appendChild(row);
       }
-      root.appendChild(box);
+      sec.body.appendChild(box);
     }
   }
   sdk.ready().then(async (ctx) => {

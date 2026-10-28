@@ -61,6 +61,28 @@ function bridge(lists: Lists, opts: { installed?: boolean; object?: { kind: stri
         edit: async () => null,
         resize: async () => null,
         on: () => () => {},
+        ui: { section },
+    };
+}
+
+/** The bridge's ui.section, as plain elements: a heading and a body. */
+function section(opts: K8sDockside.SectionOptions): K8sDockside.Section {
+    const root = document.createElement('section');
+    const title = document.createElement('h3');
+    title.textContent = opts.title;
+    const actions = document.createElement('div');
+    const body = document.createElement('div');
+    root.append(title, actions, body);
+    opts.parent?.append(root);
+    return {
+        root,
+        body,
+        actions,
+        setTitle: (text) => void (title.textContent = text),
+        setCount: () => {},
+        isFolded: () => false,
+        setFolded: () => {},
+        onToggle: () => () => {},
     };
 }
 
@@ -170,6 +192,7 @@ describe('the panel', () => {
         expect(text).toContain('CVE-2024-6387');
         expect(text).toContain('through ReplicaSet shop-7d9f8c');
         expect(text).toContain('Root file system is not read-only');
+        expect(text).toContain('Failed configuration checks');
         (document.querySelector('.container-head button') as HTMLButtonElement).click();
         expect(ran[0]).toEqual({ id: 'rescan-vulnerabilities', ref: { namespace: 'shop', name: 'replicaset-shop-7d9f8c-nginx' } });
     });

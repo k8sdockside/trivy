@@ -3,7 +3,7 @@
     "id": "trivy",
     "name": "Trivy",
     "version": "1.0.0",
-    "minAppVersion": "0.1.12",
+    "minAppVersion": "0.1.36",
     "tagline": "vulnerabilities, misconfigurations, exposed secrets and compliance, from trivy-operator",
     "icon": "shield",
     "logo": "logo.png",

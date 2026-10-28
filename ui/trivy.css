@@ -2519,6 +2519,11 @@ button.tbl-sort.on .ico {
     gap: 14px;
 }
 
+/* The panel's folding sections (k8sdockside.ui.section): the grid spaces them. */
+.panel > .k8sd-section {
+    margin: 0;
+}
+
 .panel .loading {
     padding: 10px 4px;
 }
